@@ -3,7 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --brand: 22 163 74;
+  /* Girassol (Sunflower Gold) */
+  --primary-100: 254 249 195;
+  --primary-400: 250 204 21;
+  --primary-500: 234 179 8;
+  --primary-600: 202 138 4;
+  --on-primary: 28 25 23; /* grafite quente sobre o amarelo */
 }
 
 html {
@@ -12,7 +17,11 @@ html {
 }
 
 body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+  @apply bg-canvas text-stone-900 antialiased;
+}
+
+::selection {
+  background: rgb(var(--primary-400) / 0.5);
 }
 
 @keyframes fade-in {
@@ -27,4 +36,5 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .animate-in { animation: none; }
+  .animate-pulse { animation: none; }
 }

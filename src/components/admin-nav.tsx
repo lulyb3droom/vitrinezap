@@ -27,11 +27,11 @@ export function AdminNav({ variant }: { variant: "side" | "bottom" }) {
                 variant === "side"
                   ? "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium"
                   : "flex flex-col items-center gap-0.5 py-2 text-[11px] font-medium",
-                active ? "text-brand" : "text-slate-500 hover:text-slate-900",
-                variant === "side" && active && "bg-brand/10",
+                active ? "text-primary-400" : "text-stone-400 hover:text-white",
+                variant === "side" && active && "bg-white/10",
               )}
             >
-              <Icon size={variant === "side" ? 18 : 22} />
+              <Icon size={variant === "side" ? 18 : 22} strokeWidth={1.75} />
               {label}
             </Link>
           </li>

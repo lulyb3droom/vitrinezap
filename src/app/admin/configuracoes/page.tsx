@@ -1,7 +1,7 @@
 import { requireStore } from "@/lib/session";
 import { SettingsForm } from "@/components/settings-form";
 
-export const metadata = { title: "Configurações — VitrineZap" };
+export const metadata = { title: "Configurações — MenuZap" };
 
 export default async function ConfiguracoesPage() {
   const s = await requireStore();

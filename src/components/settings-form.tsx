@@ -17,7 +17,7 @@ type Initial = {
   askScheduleDate: boolean;
 };
 
-const PRESETS = ["#16a34a", "#ef4444", "#f97316", "#eab308", "#0ea5e9", "#6366f1", "#d946ef", "#0f172a"];
+const PRESETS = ["#EAB308", "#f97316", "#ef4444", "#16a34a", "#0ea5e9", "#6366f1", "#d946ef", "#0f172a"];
 
 export function SettingsForm({ initial, slug }: { initial: Initial; slug: string }) {
   const [v, setV] = useState({ ...initial, whatsapp: formatPhone(initial.whatsapp) });
@@ -73,15 +73,15 @@ export function SettingsForm({ initial, slug }: { initial: Initial; slug: string
         </Field>
         <div className="flex items-center justify-between gap-3">
           <div>
-            <p className="text-sm font-medium text-slate-700">Pedir data/hora desejada</p>
-            <p className="text-xs text-slate-500">Para encomendas, floristas, pet shops e presentes.</p>
+            <p className="text-sm font-medium text-stone-700">Pedir data/hora desejada</p>
+            <p className="text-xs text-stone-500">Para encomendas, floristas, pet shops e presentes.</p>
           </div>
           <Switch checked={v.askScheduleDate} label="Pedir data desejada" onChange={(x) => set("askScheduleDate", x)} />
         </div>
       </Card>
 
       <Card className="space-y-3 p-4">
-        <p className="text-sm font-medium text-slate-700">Cor do tema</p>
+        <p className="text-sm font-medium text-stone-700">Cor do tema</p>
         <div className="flex flex-wrap items-center gap-2">
           {PRESETS.map((c) => (
             <button
@@ -90,7 +90,7 @@ export function SettingsForm({ initial, slug }: { initial: Initial; slug: string
               aria-label={`Cor ${c}`}
               onClick={() => set("themeColor", c)}
               style={{ backgroundColor: c }}
-              className={`h-9 w-9 rounded-full ring-offset-2 ${v.themeColor === c ? "ring-2 ring-slate-900" : ""}`}
+              className={`h-9 w-9 rounded-full ring-offset-2 ${v.themeColor === c ? "ring-2 ring-stone-900" : ""}`}
             />
           ))}
           <input

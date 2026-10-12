@@ -15,6 +15,8 @@ export const planEnum = pgEnum("plan", ["free", "pro"]);
 export const deliveryTypeEnum = pgEnum("delivery_type", ["entrega", "retirada"]);
 export const orderStatusEnum = pgEnum("order_status", ["pending", "completed"]);
 
+export type BadgeKey = "best_seller" | "artisanal" | "vegan" | "promo";
+
 /** Grupo de opções/adicionais de um produto (ex.: "Tamanho", "Coberturas"). */
 export type OptionGroup = {
   id: string;
@@ -46,7 +48,7 @@ export const profiles = pgTable("profiles", {
   whatsappNumber: text("whatsapp_number").notNull(), // só dígitos, com DDD
   description: text("description"),
   logoUrl: text("logo_url"),
-  themeColor: text("theme_color").notNull().default("#16a34a"),
+  themeColor: text("theme_color").notNull().default("#EAB308"),
   plan: planEnum("plan").notNull().default("free"),
   pixKey: text("pix_key"),
   isOpen: boolean("is_open").notNull().default(true),
@@ -85,6 +87,7 @@ export const products = pgTable(
     stock: integer("stock"), // null = sem controle de estoque
     sortOrder: integer("sort_order").notNull().default(0),
     optionsJson: jsonb("options_json").$type<OptionGroup[]>().notNull().default([]),
+    badges: jsonb("badges").$type<BadgeKey[]>().notNull().default([]),
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [index("products_store_idx").on(t.storeId), index("products_category_idx").on(t.categoryId)],

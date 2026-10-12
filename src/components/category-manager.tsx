@@ -44,7 +44,7 @@ export function CategoryManager({ categories }: { categories: Row[] }) {
               <button
                 aria-label="Subir"
                 disabled={i === 0 || pending}
-                className="rounded p-0.5 text-slate-500 hover:bg-slate-100 disabled:opacity-30"
+                className="rounded p-0.5 text-stone-500 hover:bg-stone-100 disabled:opacity-30"
                 onClick={() => start(() => moveCategory(c.id, -1))}
               >
                 <ArrowUp size={16} />
@@ -52,7 +52,7 @@ export function CategoryManager({ categories }: { categories: Row[] }) {
               <button
                 aria-label="Descer"
                 disabled={i === categories.length - 1 || pending}
-                className="rounded p-0.5 text-slate-500 hover:bg-slate-100 disabled:opacity-30"
+                className="rounded p-0.5 text-stone-500 hover:bg-stone-100 disabled:opacity-30"
                 onClick={() => start(() => moveCategory(c.id, 1))}
               >
                 <ArrowDown size={16} />
@@ -80,11 +80,11 @@ export function CategoryManager({ categories }: { categories: Row[] }) {
               <>
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-semibold">{c.name}</p>
-                  <p className="text-xs text-slate-500">{c.productCount} produto(s)</p>
+                  <p className="text-xs text-stone-500">{c.productCount} produto(s)</p>
                 </div>
                 <button
                   aria-label="Renomear"
-                  className="rounded-lg p-2 text-slate-600 hover:bg-slate-100"
+                  className="rounded-lg p-2 text-stone-600 hover:bg-stone-100"
                   onClick={() => {
                     setEditId(c.id);
                     setEditName(c.name);
@@ -94,7 +94,7 @@ export function CategoryManager({ categories }: { categories: Row[] }) {
                 </button>
                 <button
                   aria-label="Excluir"
-                  className="rounded-lg p-2 text-slate-400 hover:bg-red-50 hover:text-red-600"
+                  className="rounded-lg p-2 text-stone-400 hover:bg-red-50 hover:text-red-600"
                   onClick={() => {
                     if (confirm(`Excluir "${c.name}"? Os produtos ficarão sem categoria.`)) start(() => deleteCategory(c.id));
                   }}
@@ -106,7 +106,7 @@ export function CategoryManager({ categories }: { categories: Row[] }) {
           </Card>
         ))}
         {categories.length === 0 && (
-          <Card className="p-8 text-center text-slate-500">Crie categorias para organizar seu catálogo.</Card>
+          <Card className="p-8 text-center text-stone-500">Crie categorias para organizar seu catálogo.</Card>
         )}
       </div>
     </div>

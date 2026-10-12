@@ -1,4 +1,4 @@
-# VitrineZap
+# MenuZap
 
 Catálogos e cardápios digitais com pedido via WhatsApp. Next.js 14 (App Router + Server Actions), Tailwind, Neon Postgres + Drizzle, Auth.js, Zustand, Vercel Blob.
 

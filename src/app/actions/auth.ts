@@ -45,6 +45,7 @@ export async function registerAction(input: z.input<typeof registerSchema>): Pro
       storeSlug: slug,
       storeName: d.storeName,
       whatsappNumber: onlyDigits(d.whatsapp),
+      themeColor: "#EAB308",
     })
     .returning({ id: profiles.id });
 

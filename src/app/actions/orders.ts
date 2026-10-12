@@ -1,11 +1,14 @@
 "use server";
 
-import { and, eq, inArray } from "drizzle-orm";
+import { and, count, eq, gte, inArray, isNotNull, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
 import { orders, products, profiles, type OrderItemSummary } from "@/db/schema";
 import { buildWhatsAppMessage, whatsappUrl } from "@/lib/whatsapp";
 import { money, onlyDigits } from "@/lib/utils";
+
+const RATE_WINDOW_MS = 10 * 60 * 1000;
+const RATE_MAX_ORDERS = 40;
 
 const PAYMENTS = ["pix", "cartao", "dinheiro"] as const;
 
@@ -50,6 +53,14 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
   const [store] = await db.select().from(profiles).where(eq(profiles.storeSlug, d.slug)).limit(1);
   if (!store) return { error: "Loja não encontrada." };
   if (!store.isOpen) return { error: "A loja está fechada no momento." };
+
+  // Proteção básica contra spam/abuso: teto de pedidos por loja em janela curta.
+  const since = new Date(Date.now() - RATE_WINDOW_MS);
+  const [{ recent }] = await db
+    .select({ recent: count() })
+    .from(orders)
+    .where(and(eq(orders.storeId, store.id), gte(orders.createdAt, since)));
+  if (recent >= RATE_MAX_ORDERS) return { error: "Muitos pedidos em pouco tempo. Tente novamente em alguns minutos." };
 
   if (d.deliveryType === "entrega" && (!d.street || !d.number || !d.district))
     return { error: "Preencha rua, número e bairro para a entrega." };
@@ -124,6 +135,16 @@ export async function createOrder(input: CreateOrderInput): Promise<CreateOrderR
       notes: d.notes || null,
     })
     .returning({ id: orders.id });
+
+  // Baixa de estoque (só produtos com estoque controlado; nunca abaixo de zero).
+  await Promise.all(
+    [...qtyByProduct].map(([id, qty]) =>
+      db
+        .update(products)
+        .set({ stock: sql`greatest(${products.stock} - ${qty}, 0)` })
+        .where(and(eq(products.id, id), isNotNull(products.stock))),
+    ),
+  );
 
   const message = buildWhatsAppMessage({
     shortId: order.id.slice(0, 6).toUpperCase(),

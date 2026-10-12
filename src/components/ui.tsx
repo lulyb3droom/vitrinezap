@@ -22,9 +22,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         size === "sm" && "h-9 px-3 text-sm",
         size === "md" && "h-11 px-4 text-sm",
         size === "lg" && "h-14 px-6 text-base",
-        variant === "primary" && "bg-brand text-white shadow-sm hover:brightness-95",
-        variant === "outline" && "border border-slate-300 bg-white text-slate-800 hover:bg-slate-50",
-        variant === "ghost" && "text-slate-700 hover:bg-slate-100",
+        variant === "primary" && "bg-primary-500 text-on-brand shadow-sm hover:bg-primary-600",
+        variant === "outline" && "border border-stone-300 bg-white text-stone-800 hover:bg-stone-50",
+        variant === "ghost" && "text-stone-700 hover:bg-stone-100",
         variant === "danger" && "bg-red-600 text-white hover:bg-red-700",
         className,
       )}
@@ -34,7 +34,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
 });
 
 const fieldBase =
-  "w-full rounded-xl border border-slate-300 bg-white px-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25";
+  "w-full rounded-xl border border-stone-300 bg-white px-3 text-base text-stone-900 placeholder:text-stone-400 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25";
 
 export const Input = React.forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTMLInputElement>>(
   function Input({ className, ...props }, ref) {
@@ -65,9 +65,9 @@ export function Field({
 }) {
   return (
     <label className={cn("block space-y-1.5", className)}>
-      <span className="text-sm font-medium text-slate-700">{label}</span>
+      <span className="text-sm font-medium text-stone-700">{label}</span>
       {children}
-      {hint && <span className="block text-xs text-slate-500">{hint}</span>}
+      {hint && <span className="block text-xs text-stone-500">{hint}</span>}
     </label>
   );
 }
@@ -93,7 +93,7 @@ export function Switch({
       onClick={() => onChange(!checked)}
       className={cn(
         "relative h-7 w-12 shrink-0 rounded-full transition disabled:opacity-50",
-        checked ? "bg-brand" : "bg-slate-300",
+        checked ? "bg-brand" : "bg-stone-300",
       )}
     >
       <span
@@ -137,21 +137,21 @@ export function Modal({
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center" role="dialog" aria-modal="true">
       <div className="absolute inset-0 bg-black/50 animate-in" onClick={onClose} />
       <div className="relative flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:max-w-lg sm:rounded-3xl">
-        <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4">
-          <h2 className="text-lg font-bold text-slate-900">{title}</h2>
-          <button onClick={onClose} aria-label="Fechar" className="rounded-full p-2 text-slate-500 hover:bg-slate-100">
+        <div className="flex items-center justify-between border-b border-stone-100 px-5 py-4">
+          <h2 className="text-lg font-bold text-stone-900">{title}</h2>
+          <button onClick={onClose} aria-label="Fechar" className="rounded-full p-2 text-stone-500 hover:bg-stone-100">
             <X size={20} />
           </button>
         </div>
         <div className="overflow-y-auto px-5 py-4">{children}</div>
-        {footer && <div className="border-t border-slate-100 bg-white px-5 py-3">{footer}</div>}
+        {footer && <div className="border-t border-stone-100 bg-white px-5 py-3">{footer}</div>}
       </div>
     </div>
   );
 }
 
 export function Card({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("rounded-2xl border border-slate-200 bg-white shadow-sm", className)} {...props} />;
+  return <div className={cn("rounded-2xl border border-stone-200 bg-white shadow-sm", className)} {...props} />;
 }
 
 export function Alert({ children, tone = "error" }: { children: React.ReactNode; tone?: "error" | "info" }) {

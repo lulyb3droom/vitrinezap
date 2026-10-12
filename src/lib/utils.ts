@@ -37,3 +37,10 @@ export const RESERVED_SLUGS = new Set([
 export const money = (v: number | string) => Math.round(Number(v) * 100) / 100;
 
 export const FREE_PLAN_PRODUCT_LIMIT = 10;
+
+export const BADGES = {
+  best_seller: "Mais Pedido ⭐️",
+  artisanal: "Artesanal 🥖",
+  vegan: "Opção Vegana 🌱",
+  promo: "Promoção 🔥",
+} as const;

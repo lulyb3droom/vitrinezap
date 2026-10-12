@@ -29,6 +29,7 @@ export default async function StorePage({ params }: { params: { slug: string } }
         categoryId: p.categoryId,
         available: p.isAvailable && (p.stock === null || p.stock > 0),
         optionsJson: p.optionsJson,
+        badges: p.badges ?? [],
       }))}
     />
   );

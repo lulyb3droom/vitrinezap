@@ -29,7 +29,7 @@ function Choice({
       aria-pressed={active}
       className={cn(
         "flex flex-1 items-center justify-center gap-2 rounded-xl border-2 px-3 py-3 text-sm font-semibold transition",
-        active ? "border-brand bg-brand/10 text-brand" : "border-slate-200 text-slate-700",
+        active ? "border-primary-500 bg-primary-100 text-stone-900" : "border-stone-200 text-stone-700",
       )}
     >
       <Icon size={18} /> {children}
@@ -92,7 +92,7 @@ export function CheckoutForm({ store }: { store: StoreInfo }) {
       <main className="mx-auto flex min-h-dvh max-w-md flex-col items-center justify-center gap-4 px-4 text-center">
         <p className="text-5xl">🛒</p>
         <h1 className="text-xl font-bold">Seu carrinho está vazio</h1>
-        <Link href={`/${store.slug}`} className="rounded-xl bg-brand px-5 py-3 font-semibold text-white">
+        <Link href={`/${store.slug}`} className="rounded-xl bg-brand px-5 py-3 font-semibold text-on-brand">
           Ver catálogo
         </Link>
       </main>
@@ -101,30 +101,30 @@ export function CheckoutForm({ store }: { store: StoreInfo }) {
 
   return (
     <main className="mx-auto max-w-xl px-4 pb-32 pt-4">
-      <Link href={`/${store.slug}`} className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-slate-600">
+      <Link href={`/${store.slug}`} className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-stone-600">
         <ArrowLeft size={16} /> {store.name}
       </Link>
       <h1 className="mb-4 text-2xl font-extrabold">Finalizar pedido</h1>
 
       <form onSubmit={submit} className="space-y-5">
-        <Card className="divide-y divide-slate-100">
+        <Card className="divide-y divide-stone-100">
           {items.map((i) => (
             <div key={i.key} className="flex gap-3 p-3">
               <div className="min-w-0 flex-1">
                 <p className="font-semibold">{i.title}</p>
                 {i.options.length > 0 && (
-                  <p className="text-sm text-slate-500">{i.options.map((o) => o.name).join(", ")}</p>
+                  <p className="text-sm text-stone-500">{i.options.map((o) => o.name).join(", ")}</p>
                 )}
-                {i.note && <p className="text-sm italic text-slate-500">Obs: {i.note}</p>}
+                {i.note && <p className="text-sm italic text-stone-500">Obs: {i.note}</p>}
                 <div className="mt-2 flex items-center gap-2">
-                  <button type="button" aria-label="Diminuir" className="rounded-lg border border-slate-300 p-1.5" onClick={() => cart.setQty(i.key, i.qty - 1)}>
+                  <button type="button" aria-label="Diminuir" className="rounded-lg border border-stone-300 p-1.5" onClick={() => cart.setQty(i.key, i.qty - 1)}>
                     <Minus size={14} />
                   </button>
                   <span className="w-6 text-center font-bold">{i.qty}</span>
-                  <button type="button" aria-label="Aumentar" className="rounded-lg border border-slate-300 p-1.5" onClick={() => cart.setQty(i.key, i.qty + 1)}>
+                  <button type="button" aria-label="Aumentar" className="rounded-lg border border-stone-300 p-1.5" onClick={() => cart.setQty(i.key, i.qty + 1)}>
                     <Plus size={14} />
                   </button>
-                  <button type="button" aria-label="Remover" className="ml-1 p-1.5 text-slate-400 hover:text-red-600" onClick={() => cart.remove(i.key)}>
+                  <button type="button" aria-label="Remover" className="ml-1 p-1.5 text-stone-400 hover:text-red-600" onClick={() => cart.remove(i.key)}>
                     <Trash2 size={16} />
                   </button>
                 </div>
@@ -202,7 +202,7 @@ export function CheckoutForm({ store }: { store: StoreInfo }) {
             </Choice>
           </div>
           {payment === "pix" && (
-            <p className="rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
+            <p className="rounded-xl bg-stone-50 p-3 text-sm text-stone-600">
               {store.hasPix
                 ? "A chave Pix da loja será enviada junto com o pedido no WhatsApp."
                 : "A loja vai te passar a chave Pix pelo WhatsApp."}
@@ -222,13 +222,13 @@ export function CheckoutForm({ store }: { store: StoreInfo }) {
         {!store.isOpen && <Alert tone="info">A loja está fechada no momento e não está recebendo pedidos.</Alert>}
         {error && <Alert>{error}</Alert>}
 
-        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-stone-200 bg-white p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <div className="mx-auto flex max-w-xl items-center gap-3">
             <div className="shrink-0">
-              <p className="text-xs text-slate-500">Total</p>
+              <p className="text-xs text-stone-500">Total</p>
               <p className="text-xl font-extrabold">{brl(subtotal)}</p>
             </div>
-            <Button type="submit" size="lg" className="flex-1 !bg-[#25D366]" disabled={pending || !store.isOpen || !items.length}>
+            <Button type="submit" size="lg" className="flex-1 !bg-success-zap !text-white hover:!brightness-95" disabled={pending || !store.isOpen || !items.length}>
               {pending ? "Enviando…" : "Enviar Pedido via WhatsApp"}
             </Button>
           </div>

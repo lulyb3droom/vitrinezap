@@ -142,6 +142,7 @@ const productSchema = z.object({
   categoryId: z.string().uuid().nullable().optional(),
   stock: z.number().int().min(0).nullable().optional(),
   optionsJson: z.array(optionGroupSchema).max(10),
+  badges: z.array(z.enum(["best_seller", "artisanal", "vegan", "promo"])).max(4).default([]),
 });
 
 export type ProductInput = z.input<typeof productSchema>;
@@ -171,6 +172,7 @@ export async function saveProduct(id: string | null, input: ProductInput): Promi
     categoryId: d.categoryId ?? null,
     stock: d.stock ?? null,
     optionsJson: d.optionsJson,
+    badges: d.badges,
   };
 
   if (id) {

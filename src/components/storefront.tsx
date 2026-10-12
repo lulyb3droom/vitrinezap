@@ -5,8 +5,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Clock, ImageIcon, Minus, Plus, ShoppingBag, Store } from "lucide-react";
 import { Button, Modal, Textarea } from "@/components/ui";
 import { lineTotal, useCart, type CartOption } from "@/store/cart";
-import type { OptionGroup } from "@/db/schema";
-import { brl, cn } from "@/lib/utils";
+import type { BadgeKey, OptionGroup } from "@/db/schema";
+import { BADGES, brl, cn } from "@/lib/utils";
 
 type StoreInfo = {
   slug: string;
@@ -26,6 +26,7 @@ type Prod = {
   categoryId: string | null;
   available: boolean;
   optionsJson: OptionGroup[];
+  badges: BadgeKey[];
 };
 
 export function useHydrated() {
@@ -72,11 +73,11 @@ export function Storefront({ store, categories, products }: { store: StoreInfo; 
   }, [activeCat]);
 
   return (
-    <div className="mx-auto min-h-dvh max-w-5xl bg-white pb-28 shadow-sm sm:my-0">
+    <div className="mx-auto min-h-dvh max-w-5xl bg-canvas pb-28">
       <header className="relative">
-        <div className="h-28 bg-brand sm:h-36" />
+        <div className="h-28 bg-gradient-to-br from-primary-400 via-primary-500 to-primary-600 sm:h-40" />
         <div className="-mt-12 flex items-end gap-4 px-4">
-          <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white bg-slate-100 text-slate-400 shadow">
+          <div className="flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-full bg-stone-100 text-stone-400 shadow-lg ring-4 ring-white">
             {store.logoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img src={store.logoUrl} alt={`Logo ${store.name}`} className="h-full w-full object-cover" />
@@ -87,18 +88,18 @@ export function Storefront({ store, categories, products }: { store: StoreInfo; 
           <span
             className={cn(
               "mb-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold",
-              store.isOpen ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700",
+              store.isOpen ? "bg-green-100 text-green-700" : "bg-stone-200 text-stone-600",
             )}
           >
-            <span className={cn("h-2 w-2 rounded-full", store.isOpen ? "bg-green-500" : "bg-red-500")} />
+            <span className={cn("h-2 w-2 rounded-full", store.isOpen ? "animate-pulse bg-green-500" : "bg-stone-400")} />
             {store.isOpen ? "Aberto agora" : "Fechado"}
           </span>
         </div>
         <div className="px-4 pb-4 pt-3">
           <h1 className="text-2xl font-extrabold tracking-tight">{store.name}</h1>
-          {store.description && <p className="mt-1 text-slate-600">{store.description}</p>}
+          {store.description && <p className="mt-1 text-stone-600">{store.description}</p>}
           {store.openingHours && (
-            <p className="mt-2 flex items-center gap-1.5 text-sm text-slate-500">
+            <p className="mt-2 flex items-center gap-1.5 text-sm text-stone-500">
               <Clock size={15} /> {store.openingHours}
             </p>
           )}
@@ -113,7 +114,7 @@ export function Storefront({ store, categories, products }: { store: StoreInfo; 
       {sections.length > 1 && (
         <nav
           aria-label="Categorias"
-          className="sticky top-0 z-20 border-y border-slate-100 bg-white/95 backdrop-blur"
+          className="sticky top-0 z-30 border-y border-stone-200/70 bg-canvas/90 backdrop-blur-md"
         >
           <div ref={chipsRef} className="no-scrollbar flex gap-2 overflow-x-auto px-4 py-3">
             {sections.map((s) => (
@@ -123,7 +124,9 @@ export function Storefront({ store, categories, products }: { store: StoreInfo; 
                 onClick={() => document.getElementById(`cat-${s.id}`)?.scrollIntoView({ behavior: "smooth", block: "start" })}
                 className={cn(
                   "shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition",
-                  activeCat === s.id ? "bg-brand text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200",
+                  activeCat === s.id
+                    ? "bg-primary-500 font-semibold text-on-brand shadow-sm"
+                    : "bg-white text-stone-700 ring-1 ring-stone-200 hover:bg-stone-100",
                 )}
               >
                 {s.name}
@@ -135,12 +138,12 @@ export function Storefront({ store, categories, products }: { store: StoreInfo; 
 
       <main className="space-y-8 px-4 py-6">
         {sections.length === 0 && (
-          <p className="py-16 text-center text-slate-500">Esta loja ainda não cadastrou produtos.</p>
+          <p className="py-16 text-center text-stone-500">Esta loja ainda não cadastrou produtos.</p>
         )}
         {sections.map((s) => (
           <section key={s.id} id={`cat-${s.id}`} className="scroll-mt-20">
-            <h2 className="mb-3 text-lg font-bold">{s.name}</h2>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <h2 className="mb-4 text-xl font-extrabold tracking-tight">{s.name}</h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
               {s.items.map((p) => (
                 <ProductCard key={p.id} p={p} onOpen={() => setSelected(p)} />
               ))}
@@ -153,11 +156,11 @@ export function Storefront({ store, categories, products }: { store: StoreInfo; 
         <div className="pointer-events-none fixed inset-x-0 bottom-0 z-30 flex justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
           <Link
             href={`/${store.slug}/checkout`}
-            className="pointer-events-auto flex w-full max-w-md items-center justify-between rounded-2xl bg-brand px-5 py-4 font-bold text-white shadow-xl active:scale-[0.99]"
+            className="pointer-events-auto flex w-full max-w-md items-center justify-between rounded-2xl bg-primary-500 px-5 py-4 font-bold text-on-brand shadow-xl ring-1 ring-black/5 transition hover:bg-primary-600 active:scale-[0.99]"
           >
             <span className="relative flex items-center gap-2">
               <ShoppingBag />
-              <span className="absolute -right-3 -top-3 flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-xs font-extrabold text-brand">
+              <span className="absolute -right-3 -top-3 flex h-5 min-w-5 items-center justify-center rounded-full bg-stone-900 px-1 text-xs font-extrabold text-white">
                 {qty}
               </span>
               <span className="ml-3">Ver carrinho</span>
@@ -176,35 +179,49 @@ function ProductCard({ p, onOpen }: { p: Prod; onOpen: () => void }) {
   return (
     <article
       className={cn(
-        "flex gap-3 overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 sm:flex-col sm:p-0",
-        !p.available && "opacity-60",
+        "group flex gap-3 overflow-hidden rounded-2xl border border-stone-200/80 bg-white p-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-lg sm:flex-col sm:p-3",
+        !p.available && "opacity-60 hover:translate-y-0 hover:shadow-none",
       )}
     >
-      <div className="relative h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-slate-100 sm:h-44 sm:w-full sm:rounded-none">
+      <div className="relative aspect-[4/3] w-32 shrink-0 overflow-hidden rounded-xl bg-stone-100 sm:w-full">
         {p.imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={p.imageUrl} alt={p.title} loading="lazy" decoding="async" className="h-full w-full object-cover" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center text-slate-300">
-            <ImageIcon size={32} />
+          <div className="flex h-full w-full items-center justify-center text-stone-300">
+            <ImageIcon size={32} strokeWidth={1.75} />
           </div>
         )}
         {!p.available && (
-          <span className="absolute inset-0 flex items-center justify-center bg-white/70 text-xs font-bold uppercase text-slate-700">
+          <span className="absolute inset-0 flex items-center justify-center bg-white/70 text-xs font-bold uppercase text-stone-700">
             Esgotado
           </span>
         )}
       </div>
-      <div className="flex min-w-0 flex-1 flex-col justify-between sm:p-3">
+      <div className="flex min-w-0 flex-1 flex-col justify-between">
         <div>
+          {p.badges.length > 0 && (
+            <div className="mb-1.5 flex flex-wrap gap-1">
+              {p.badges.map((b) => (
+                <span key={b} className="rounded-full bg-accent-badge px-2 py-0.5 text-[11px] font-semibold text-stone-800">
+                  {BADGES[b]}
+                </span>
+              ))}
+            </div>
+          )}
           <h3 className="font-semibold leading-snug">{p.title}</h3>
-          {p.description && <p className="mt-0.5 line-clamp-2 text-sm text-slate-500">{p.description}</p>}
+          {p.description && <p className="mt-0.5 line-clamp-2 text-sm text-stone-500">{p.description}</p>}
         </div>
-        <div className="mt-2 flex items-center justify-between gap-2">
-          <p className="text-lg font-extrabold text-brand">{brl(p.price)}</p>
-          <Button size="sm" disabled={!p.available} onClick={onOpen}>
-            <Plus size={16} /> Adicionar
-          </Button>
+        <div className="mt-3 flex items-center justify-between gap-2">
+          <p className="text-lg font-bold text-stone-900">{brl(p.price)}</p>
+          <button
+            disabled={!p.available}
+            onClick={onOpen}
+            aria-label={`Adicionar ${p.title}`}
+            className="flex h-10 items-center gap-1 rounded-xl bg-primary-100 px-3 text-sm font-semibold text-stone-900 transition-colors hover:bg-primary-500 hover:text-on-brand disabled:pointer-events-none"
+          >
+            <Plus size={18} strokeWidth={2} /> Adicionar
+          </button>
         </div>
       </div>
     </article>
@@ -250,13 +267,13 @@ function ProductSheet({ slug, product: p, onClose }: { slug: string; product: Pr
         <div className="space-y-2">
           {error && <p className="text-sm text-red-600">{error}</p>}
           <div className="flex items-center gap-3">
-            <div className="flex items-center rounded-xl border border-slate-300">
+            <div className="flex items-center rounded-xl border border-stone-300">
               <button aria-label="Diminuir" className="p-3" onClick={() => setQty((q) => Math.max(1, q - 1))}>
-                <Minus size={18} />
+                <Minus size={18} strokeWidth={1.75} />
               </button>
               <span className="w-8 text-center font-bold">{qty}</span>
               <button aria-label="Aumentar" className="p-3" onClick={() => setQty((q) => Math.min(99, q + 1))}>
-                <Plus size={18} />
+                <Plus size={18} strokeWidth={1.75} />
               </button>
             </div>
             <Button size="lg" className="flex-1" onClick={confirm}>
@@ -271,28 +288,22 @@ function ProductSheet({ slug, product: p, onClose }: { slug: string; product: Pr
           // eslint-disable-next-line @next/next/no-img-element
           <img src={p.imageUrl} alt={p.title} className="h-52 w-full rounded-2xl object-cover" />
         )}
-        {p.description && <p className="text-slate-600">{p.description}</p>}
+        {p.description && <p className="text-stone-600">{p.description}</p>}
 
         {p.optionsJson.map((g) => (
           <fieldset key={g.id} className="space-y-2">
             <legend className="flex w-full items-center justify-between font-semibold">
               <span>{g.name}</span>
-              <span className="text-xs font-medium text-slate-500">
+              <span className="text-xs font-medium text-stone-500">
                 {g.required ? "Obrigatório" : "Opcional"}
                 {g.type === "multiple" && g.max ? ` · até ${g.max}` : ""}
               </span>
             </legend>
-            {g.items.map((it) => {
-              const on = (picked[g.id] ?? []).includes(it.id);
-              return (
-                <label
-                  key={it.id}
-                  className={cn(
-                    "flex cursor-pointer items-center justify-between gap-3 rounded-xl border px-3 py-3",
-                    on ? "border-brand bg-brand/5" : "border-slate-200",
-                  )}
-                >
-                  <span className="flex items-center gap-3">
+            <div className="flex flex-wrap gap-2">
+              {g.items.map((it) => {
+                const on = (picked[g.id] ?? []).includes(it.id);
+                return (
+                  <label key={it.id} className="cursor-pointer">
                     <input
                       type={g.type === "single" ? "radio" : "checkbox"}
                       name={g.id}
@@ -301,14 +312,16 @@ function ProductSheet({ slug, product: p, onClose }: { slug: string; product: Pr
                         setError(undefined);
                         toggle(g, it.id);
                       }}
-                      className="h-5 w-5 accent-[rgb(var(--brand))]"
+                      className="peer sr-only"
                     />
-                    {it.name}
-                  </span>
-                  {it.price > 0 && <span className="text-sm text-slate-500">+ {brl(it.price)}</span>}
-                </label>
-              );
-            })}
+                    <span className="flex items-center gap-2 rounded-xl border-2 border-stone-200 bg-white px-3.5 py-2.5 text-sm font-medium transition peer-checked:border-primary-500 peer-checked:bg-primary-100 peer-focus-visible:ring-2 peer-focus-visible:ring-primary-500">
+                      {it.name}
+                      {it.price > 0 && <span className="text-xs text-stone-500">+ {brl(it.price)}</span>}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
           </fieldset>
         ))}
 

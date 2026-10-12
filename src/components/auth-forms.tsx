@@ -4,17 +4,18 @@ import Link from "next/link";
 import { useState, useTransition } from "react";
 import { Alert, Button, Card, Field, Input } from "@/components/ui";
 import { loginAction, registerAction } from "@/app/actions/auth";
+import { Logo } from "@/components/logo";
 import { formatPhone, slugify } from "@/lib/utils";
 
 function Shell({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
   return (
     <main className="mx-auto flex min-h-dvh max-w-md flex-col justify-center px-4 py-10">
-      <Link href="/" className="mb-6 text-center text-2xl font-extrabold text-brand">
-        Vitrine<span className="text-slate-900">Zap</span>
+      <Link href="/" className="mb-6 flex justify-center" aria-label="MenuZap">
+        <Logo className="text-2xl" />
       </Link>
       <Card className="p-6">
         <h1 className="text-xl font-bold">{title}</h1>
-        <p className="mb-5 mt-1 text-sm text-slate-500">{subtitle}</p>
+        <p className="mb-5 mt-1 text-sm text-stone-500">{subtitle}</p>
         {children}
       </Card>
     </main>
@@ -50,9 +51,9 @@ export function LoginForm({ next }: { next?: string }) {
           {pending ? "Entrando…" : "Entrar"}
         </Button>
       </form>
-      <p className="mt-5 text-center text-sm text-slate-600">
+      <p className="mt-5 text-center text-sm text-stone-600">
         Ainda não tem loja?{" "}
-        <Link href="/cadastro" className="font-semibold text-brand">
+        <Link href="/cadastro" className="font-semibold text-stone-900 underline decoration-primary-500 decoration-2 underline-offset-4">
           Criar grátis
         </Link>
       </p>
@@ -100,8 +101,8 @@ export function RegisterForm() {
           />
         </Field>
         <Field label="Link da loja" hint="É o endereço que você vai divulgar para seus clientes.">
-          <div className="flex items-center rounded-xl border border-slate-300 bg-white pl-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/25">
-            <span className="text-sm text-slate-400">vitrinezap.com/</span>
+          <div className="flex items-center rounded-xl border border-stone-300 bg-white pl-3 focus-within:border-brand focus-within:ring-2 focus-within:ring-brand/25">
+            <span className="text-sm text-stone-400">menuzap.com/</span>
             <input
               value={slug}
               onChange={(e) => {
@@ -133,9 +134,9 @@ export function RegisterForm() {
           {pending ? "Criando…" : "Criar minha loja"}
         </Button>
       </form>
-      <p className="mt-5 text-center text-sm text-slate-600">
+      <p className="mt-5 text-center text-sm text-stone-600">
         Já tem conta?{" "}
-        <Link href="/login" className="font-semibold text-brand">
+        <Link href="/login" className="font-semibold text-stone-900 underline decoration-primary-500 decoration-2 underline-offset-4">
           Entrar
         </Link>
       </p>

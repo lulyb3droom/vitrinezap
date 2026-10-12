@@ -4,7 +4,7 @@ import { categories, products } from "@/db/schema";
 import { requireStore } from "@/lib/session";
 import { ProductManager } from "@/components/product-manager";
 
-export const metadata = { title: "Produtos — VitrineZap" };
+export const metadata = { title: "Produtos — MenuZap" };
 
 export default async function ProdutosPage() {
   const store = await requireStore();
@@ -27,6 +27,7 @@ export default async function ProdutosPage() {
         stock: p.stock,
         categoryId: p.categoryId,
         optionsJson: p.optionsJson,
+        badges: p.badges ?? [],
       }))}
     />
   );

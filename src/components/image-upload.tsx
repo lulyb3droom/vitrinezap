@@ -44,7 +44,7 @@ export function ImageUpload({
           type="button"
           onClick={() => ref.current?.click()}
           className={cn(
-            "relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden border-2 border-dashed border-slate-300 bg-slate-50 text-slate-400 hover:border-brand hover:text-brand",
+            "relative flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden border-2 border-dashed border-stone-300 bg-stone-50 text-stone-400 hover:border-primary-500 hover:text-stone-900",
             round ? "rounded-full" : "rounded-2xl",
           )}
           aria-label={label}
@@ -64,19 +64,19 @@ export function ImageUpload({
           )}
         </button>
         <div className="text-sm">
-          <button type="button" onClick={() => ref.current?.click()} className="font-semibold text-brand">
+          <button type="button" onClick={() => ref.current?.click()} className="font-semibold text-stone-900 underline decoration-primary-500 decoration-2 underline-offset-4">
             {value ? "Trocar imagem" : label}
           </button>
           {value && (
             <button
               type="button"
               onClick={() => onChange(null)}
-              className="mt-1 flex items-center gap-1 text-slate-500 hover:text-red-600"
+              className="mt-1 flex items-center gap-1 text-stone-500 hover:text-red-600"
             >
               <Trash2 size={14} /> Remover
             </button>
           )}
-          <p className="text-xs text-slate-500">JPG, PNG ou WebP até 4 MB.</p>
+          <p className="text-xs text-stone-500">JPG, PNG ou WebP até 4 MB.</p>
         </div>
       </div>
       <input
